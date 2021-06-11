@@ -347,8 +347,6 @@ bench_all(){
 	benchinit;
 	clear
 	next;
-	print_intro;
-	next;
 	get_system_info;
 	print_system_info;
 	ip_info4;
@@ -365,8 +363,6 @@ fast_bench(){
 	about;
 	benchinit;
 	clear
-	next;
-	print_intro;
 	next;
 	get_system_info;
 	print_system_info;
