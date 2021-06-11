@@ -337,8 +337,6 @@ get_system_info() {
 
 cleanup() {
 	rm -f test_file_*
-	rm -rf speedtest*
-	rm -f fast_com*
 	rm -f tools.py
 	rm -f ip_json.json
 }
