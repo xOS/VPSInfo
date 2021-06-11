@@ -335,6 +335,12 @@ get_system_info() {
 	virt_check
 }
 
+print_intro() {
+	printf ' GetInfo.sh -- https://github.com/xOS/VPSInfo\n' | tee -a $log
+	printf " Mode  : \e${GREEN}%s\e${PLAIN}    Version : \e${GREEN}%s${PLAIN}\n" $mode_name 1.0 | tee -a $log
+	printf ' Usage : wget -qO- git.io/GetInfo.sh | bash\n' | tee -a $log
+}
+
 cleanup() {
 	rm -f test_file_*
 	rm -f tools.py
@@ -346,6 +352,8 @@ bench_all(){
 	about;
 	benchinit;
 	clear
+	next;
+	print_intro;
 	next;
 	get_system_info;
 	print_system_info;
@@ -363,6 +371,8 @@ fast_bench(){
 	about;
 	benchinit;
 	clear
+	next;
+	print_intro;
 	next;
 	get_system_info;
 	print_system_info;
