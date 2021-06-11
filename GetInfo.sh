@@ -349,7 +349,6 @@ cleanup() {
 
 bench_all(){
 	mode_name="Standard"
-	about;
 	benchinit;
 	clear
 	next;
@@ -368,7 +367,6 @@ bench_all(){
 
 fast_bench(){
 	mode_name="Fast"
-	about;
 	benchinit;
 	clear
 	next;
@@ -419,15 +417,3 @@ case $1 in
 *)
     bench_all;;
 esac
-
-if [[  ! $is_share == "share" ]]; then
-	case $2 in
-		'share'|'-s'|'--s'|'-share'|'--share' )
-			if [[ $3 == '' ]]; then
-				sharetest ubuntu;
-			else
-				sharetest $3;
-			fi
-			;;
-	esac
-fi
