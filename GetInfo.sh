@@ -393,24 +393,10 @@ case $1 in
 		next;about;next;;
    	'io'|'-io'|'--io'|'-drivespeed'|'--drivespeed' )
 		next;print_io;next;;
-	'speed'|'-speed'|'--speed'|'-speedtest'|'--speedtest'|'-speedcheck'|'--speedcheck' )
-		about;benchinit;next;print_speedtest;next;cleanup;;
 	'ip'|'-ip'|'--ip'|'geoip'|'-geoip'|'--geoip' )
 		about;benchinit;next;ip_info4;next;cleanup;;
 	'bench'|'-a'|'--a'|'-all'|'--all'|'-bench'|'--bench' )
 		bench_all;;
-	'about'|'-about'|'--about' )
-		about;;
-	'fast'|'-f'|'--f'|'-fast'|'--fast' )
-		fast_bench;;
-	'share'|'-s'|'--s'|'-share'|'--share' )
-		bench_all;
-		is_share="share"
-		if [[ $2 == "" ]]; then
-			sharetest ubuntu;
-		else
-			sharetest $2;
-		fi
 		;;
 	'debug'|'-d'|'--d'|'-debug'|'--debug' )
 		get_ip_whois_org_name;;
