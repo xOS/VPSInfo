@@ -71,7 +71,7 @@ benchinit() {
 
 	if  [ ! -e 'tools.py' ]; then
 		echo " Installing tools.py ..."
-		wget --no-check-certificate https://cdn.jsdelivr.net/gh/oooldking/script@master/tools.py > /dev/null 2>&1
+		wget --no-check-certificate https://cdn.jsdelivr.net/gh/xOS/scriptVPSInfo@master/tools.py > /dev/null 2>&1
 	fi
 	chmod a+rx tools.py
 
@@ -127,29 +127,32 @@ install_smart() {
 }
 
 ip_info4(){
-	ip_date=$(curl -4 -s http://api.ip.la/en?json)
+	ip_date=$(curl -s https://ip.nan.ge/json)
 	echo $ip_date > ip_json.json
-	isp=$(python tools.py geoip isp)
-	as_tmp=$(python tools.py geoip as)
-	asn=$(echo $as_tmp | awk -F ' ' '{print $1}')
+	ip=$(python tools.py geoip ip)
+	isp=$(python tools.py geoip org)
+	asn=$(python tools.py geoip asn)
 	org=$(python tools.py geoip org)
 	if [ -z "ip_date" ]; then
 		echo $ip_date
 		echo "hala"
-		country=$(python tools.py ipip country_name)
-		city=$(python tools.py ipip city)
-		countryCode=$(python tools.py ipip country_code)
-		region=$(python tools.py ipip province)
+		ip=$(python tools.py nip ip)
+		country=$(python tools.py nip country)
+		city=$(python tools.py nip city)
+		countryCode=$(python tools.py nip country_iso)
+		region=$(python tools.py nip region_name)
 	else
-		country=$(python tools.py geoip country)
+		ip=$(python tools.py geoip ip)
+		country=$(python tools.py geoip country_name)
 		city=$(python tools.py geoip city)
-		countryCode=$(python tools.py geoip countryCode)
-		region=$(python tools.py geoip regionName)	
+		countryCode=$(python tools.py geoip country_code)
+		region=$(python tools.py geoip region)	
 	fi
 	if [ -z "$city" ]; then
 		city=${region}
 	fi
 
+	echo -e " IP                   : ${SKYBLUE}$ip${PLAIN}" | tee -a $log
 	echo -e " ASN & ISP            : ${SKYBLUE}$asn, $isp${PLAIN}" | tee -a $log
 	echo -e " Organization         : ${YELLOW}$org${PLAIN}" | tee -a $log
 	echo -e " Location             : ${SKYBLUE}$city, ${YELLOW}$country / $countryCode${PLAIN}" | tee -a $log
