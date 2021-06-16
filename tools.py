@@ -9,11 +9,10 @@ import subprocess
 reload(sys)
 sys.setdefaultencoding('utf-8')
 
-def GetIpipInfo(para):
-    f = open("ip_json.json",'r')
-    ijson = json.load(f)
-    jjson = ijson['location']
-    print jjson[para.encode('utf-8')]
+def GetNipInfo(para):
+    ip_api = urllib2.urlopen(r'https://ip.nan.ge/json')
+    ijson = json.loads(ip_api.read())
+    print ijson[para.encode('utf-8')]
 
 def GetGeoioInfo(para):
     ip_api = urllib2.urlopen(r'https://ipapi.co/json')
@@ -64,7 +63,7 @@ if __name__ == "__main__":
         GetDiskInfo(sys.argv[2])
     elif type == 'geoip':
         GetGeoioInfo(sys.argv[2])
-    elif type == 'ipip':
-        GetIpipInfo(sys.argv[2])
+    elif type == 'nip':
+        GetNipInfo(sys.argv[2])
     else:
         print 'ERROR: Parameter error'
