@@ -152,7 +152,7 @@ ip_info4(){
 		city=${region}
 	fi
 
-	echo -e " IP                   : ${SKYBLUE}$ip${PLAIN}" | tee -a $log
+	echo -e " IP                   : ${YELLOW}$ip${PLAIN}" | tee -a $log
 	echo -e " ASN & ISP            : ${SKYBLUE}$asn, $isp${PLAIN}" | tee -a $log
 	echo -e " Organization         : ${YELLOW}$org${PLAIN}" | tee -a $log
 	echo -e " Location             : ${SKYBLUE}$city, ${YELLOW}$country / $countryCode${PLAIN}" | tee -a $log
