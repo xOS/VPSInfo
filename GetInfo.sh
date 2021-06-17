@@ -155,7 +155,7 @@ ip_info4(){
 	echo -e " IP                   : ${YELLOW}$ip${PLAIN}" | tee -a $log
 	echo -e " ASN & ISP            : ${SKYBLUE}$asn, $isp${PLAIN}" | tee -a $log
 	echo -e " Organization         : ${YELLOW}$org${PLAIN}" | tee -a $log
-	echo -e " Location             : ${SKYBLUE}$city, ${YELLOW}$country / $countryCode${PLAIN}" | tee -a $log
+	echo -e " Location             : ${SKYBLUE}$city, ${YELLOW}$country[$countryCode${PLAIN}]" | tee -a $log
 	echo -e " Region               : ${SKYBLUE}$region${PLAIN}" | tee -a $log
 
 	rm -rf tools.py
