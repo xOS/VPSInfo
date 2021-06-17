@@ -10,7 +10,7 @@ reload(sys)
 sys.setdefaultencoding('utf-8')
 
 def GetNipInfo(para):
-    ip_api = urllib2.urlopen(r'https://ip.nan.ge/json')
+    ip_api = urllib2.urlopen(r'https://api.ipgeolocation.io/ipgeo?apiKey=5106b943f2fc4cbebe898384425bef83')
     ijson = json.loads(ip_api.read())
     print ijson[para.encode('utf-8')]
 
