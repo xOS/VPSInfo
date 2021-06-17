@@ -1,0 +1,19 @@
+name: Purge CDN
+
+on:
+  push:
+    branches:
+      - "master"
+    paths-ignore:
+      - "LICENSE"
+      - "*.md"
+      - ".*"
+
+
+jobs:
+  build:
+    name: Generate GeoIP2 database
+    runs-on: ubuntu-latest
+    steps:
+    - name: Purge CDN Cache
+      run: curl -L https://purge.jsdelivr.net/gh/xOS/VPSInfo@master/tools.py > /dev/null 2>&1
