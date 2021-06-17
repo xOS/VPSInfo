@@ -129,18 +129,18 @@ install_smart() {
 ip_info4(){
 	ip_date=$(curl -s https://ip.nan.ge/json)
 	echo $ip_date > ip_json.json
-	ip=$(python tools.py geoip ip)
-	isp=$(python tools.py geoip org)
+	ip=$(python tools.py nip ip)
+	isp=$(python tools.py nip isp)
 	asn=$(python tools.py geoip asn)
-	org=$(python tools.py geoip org)
+	org=$(python tools.py nip organization)
 	if [ -z "ip_date" ]; then
 		echo $ip_date
 		echo "hala"
 		ip=$(python tools.py nip ip)
-		country=$(python tools.py nip country)
+		country=$(python tools.py nip country_name)
 		city=$(python tools.py nip city)
-		countryCode=$(python tools.py nip country_iso)
-		region=$(python tools.py nip region_name)
+		countryCode=$(python tools.py nip country_code2)
+		region=$(python tools.py nip state_prov)
 	else
 		ip=$(python tools.py geoip ip)
 		country=$(python tools.py geoip country_name)
