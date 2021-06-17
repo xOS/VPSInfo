@@ -139,7 +139,7 @@ ip_info4(){
 		ip=$(python tools.py nip ip)
 		country=$(python tools.py nip country_name)
 		city=$(python tools.py nip city)
-		countryCode=$(python tools.py nip country_code2)
+		countryCode=$(python tools.py nip country_code3)
 		region=$(python tools.py nip state_prov)
 	else
 		ip=$(python tools.py geoip ip)
