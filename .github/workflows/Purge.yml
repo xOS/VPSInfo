@@ -11,8 +11,8 @@ on:
 
 
 jobs:
-  build:
-    name: Generate GeoIP2 database
+  Purge:
+    name: Purge CDN
     runs-on: ubuntu-latest
     steps:
     - name: Purge CDN Cache
