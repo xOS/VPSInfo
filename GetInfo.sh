@@ -35,14 +35,14 @@ benchinit() {
 
 	[[ $EUID -ne 0 ]] && echo -e "${RED}Error:${PLAIN} This script must be run as root!" && exit 1
 
-	if  [ ! -e '/usr/bin/python' ]; then
+	if  [ ! -e '/usr/bin/python3' ]; then
 	        echo " Installing Python ..."
 	            if [ "${release}" == "centos" ]; then
 	            		yum update > /dev/null 2>&1
-	                    yum -y install python > /dev/null 2>&1
+	                    yum -y install python3 > /dev/null 2>&1
 	                else
 	                	apt-get update > /dev/null 2>&1
-	                    apt-get -y install python > /dev/null 2>&1
+	                    apt-get -y install python3 > /dev/null 2>&1
 	                fi
 	        
 	fi
@@ -129,24 +129,24 @@ install_smart() {
 ip_info4(){
 	ip_date=$(curl -s https://ip.nan.ge/json)
 	echo $ip_date > ip_json.json
-	ip=$(python tools.py nip ip)
-	isp=$(python tools.py nip isp)
-	asn=$(python tools.py geoip asn)
-	org=$(python tools.py nip organization)
+	ip=$(python3 tools.py nip ip)
+	isp=$(python3 tools.py nip isp)
+	asn=$(python3 tools.py geoip asn)
+	org=$(python3 tools.py nip organization)
 	if [ -z "ip_date" ]; then
 		echo $ip_date
 		echo "hala"
-		ip=$(python tools.py nip ip)
-		country=$(python tools.py nip country_name)
-		city=$(python tools.py nip city)
-		countryCode=$(python tools.py nip country_code3)
-		region=$(python tools.py nip state_prov)
+		ip=$(python3 tools.py nip ip)
+		country=$(python3 tools.py nip country_name)
+		city=$(python3 tools.py nip city)
+		countryCode=$(python3 tools.py nip country_code3)
+		region=$(python3 tools.py nip state_prov)
 	else
-		ip=$(python tools.py geoip ip)
-		country=$(python tools.py geoip country_name)
-		city=$(python tools.py geoip city)
-		countryCode=$(python tools.py geoip country_code)
-		region=$(python tools.py geoip region)	
+		ip=$(python3 tools.py geoip ip)
+		country=$(python3 tools.py geoip country_name)
+		city=$(python3 tools.py geoip city)
+		countryCode=$(python3 tools.py geoip country_code)
+		region=$(python3 tools.py geoip region)	
 	fi
 	if [ -z "$city" ]; then
 		city=${region}
