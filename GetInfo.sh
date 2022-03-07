@@ -443,8 +443,6 @@ case $1 in
 		about;benchinit;next;ip_info;next;cleanup;;
 	'bench'|'-a'|'--a'|'-all'|'--all'|'-bench'|'--bench' )
 		bench_all;;
-	'debug'|'-d'|'--d'|'-debug'|'--debug' )
-		get_ip_whois_org_name;;
 *)
     bench_all;;
 esac
