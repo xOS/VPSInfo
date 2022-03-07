@@ -71,6 +71,7 @@ benchinit() {
 
 	if  [ ! -e 'tools.py' ]; then
 		echo " Installing tools.py ..."
+		curl -s https://purge.jsdelivr.net/gh/xOS/VPSInfo@master/tools.py > /dev/null 2>&1
 		wget --no-check-certificate https://cdn.jsdelivr.net/gh/xOS/VPSInfo@master/tools.py > /dev/null 2>&1
 	fi
 	chmod a+rx tools.py
@@ -339,7 +340,7 @@ get_system_info() {
 }
 
 print_intro() {
-	printf ' GetInfo.sh -- https://github.com/xOS/VPSInfo\n' | tee -a $log
+	printf ' VPSInfo.sh -- https://github.com/xOS/VPSInfo\n' | tee -a $log
 	printf " Mode  : \e${GREEN}%s\e${PLAIN}    Version : \e${GREEN}%s${PLAIN}\n" $mode_name 1.0 | tee -a $log
 	printf ' Usage : wget -qO- git.io/GetInfo.sh | bash\n' | tee -a $log
 }
@@ -386,7 +387,7 @@ fast_bench(){
 	cleanup;
 }
 
-log="./GetInfo.log"
+log="./VPSInfo.log"
 true > $log
 
 case $1 in
