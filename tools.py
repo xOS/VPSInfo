@@ -9,16 +9,6 @@ import subprocess
 reload(sys)
 sys.setdefaultencoding('utf-8')
 
-def GetNipInfo(para):
-    api1 = urllib2.urlopen(r'https://api.ipgeolocation.io/ipgeo?apiKey=5106b943f2fc4cbebe898384425bef83')
-    json1 = json.loads(api1.read())
-    print json1[para.encode('utf-8')]
-
-def GetGeoioInfo(para):
-    api2 = urllib2.urlopen(r'https://ipapi.co/json')
-    json2 = json.loads(api2.read())
-    print json2[para.encode('utf-8')]
-    
 def GetDiskInfo(para):
     temp = ExecShell("df -h -P|grep '/'|grep -v tmpfs")[0];
     temp1 = temp.split('\n');
@@ -61,9 +51,5 @@ if __name__ == "__main__":
     type = sys.argv[1];
     if type == 'disk':
         GetDiskInfo(sys.argv[2])
-    elif type == 'geoip':
-        GetGeoioInfo(sys.argv[2])
-    elif type == 'nip':
-        GetNipInfo(sys.argv[2])
     else:
         print 'ERROR: Parameter error'
