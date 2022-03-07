@@ -141,17 +141,19 @@ install_smart() {
 ip_info(){
     data_v4=$(curl -s -4 --connect-timeout 3 -m 3 'https://ip.qste.com/json' | jq -r) 
     data_v6=$(curl -s -6 --connect-timeout 3 -m 3 'https://ip.qste.com/json' | jq -r)
+	data=$(curl -s --connect-timeout 3 -m 3 'http://ip-api.com/json' | jq -r)
+	echo $data > data.json
     
 	if [[ ! -z "$data_v4" ]] && [[ -z "$data_v6" ]]; then
 	echo $data_v4 > ipv4.json
 	ipv4=$(cat ipv4.json | jq -r '.ip')
-	isp=$(cat ipv4.json | jq -r '.isp')
-	asn=$(cat ipv4.json | jq -r '.asn')
-	org=$(cat ipv4.json | jq -r '.org')
-	country=$(cat ipv4.json | jq -r '.country')
-	city=$(cat ipv4.json | jq -r '.city')
-	countryCode=$(cat ipv4.json | jq -r '.country_code')
-	region=$(cat ipv4.json | jq -r '.region')
+	isp=$(cat data.json | jq -r '.isp')
+	asn=$(cat data.json | jq -r '.as')
+	org=$(cat data.json | jq -r '.org')
+	country=$(cat data.json | jq -r '.country')
+	city=$(cat data.json | jq -r '.city')
+	countryCode=$(cat data.json | jq -r '.countryCode')
+	region=$(cat data.json | jq -r '.regionName')
 	
 	elif [[ ! -z "$data_v6" ]] && [[ -z "$data_v4" ]]; then
 	echo $data_v6 > ipv6.json
@@ -169,13 +171,14 @@ ip_info(){
 	echo $data_v6 > ipv6.json
 	ipv4=$(cat ipv4.json | jq -r '.ip')
 	ipv6=$(cat ipv6.json | jq -r '.ip')
-	isp=$(cat ipv4.json | jq -r '.isp')
-	asn=$(cat ipv4.json | jq -r '.asn')
-	org=$(cat ipv4.json | jq -r '.org')
-	country=$(cat ipv4.json | jq -r '.country')
-	city=$(cat ipv4.json | jq -r '.city')
-	countryCode=$(cat ipv4.json | jq -r '.country_code')
-	region=$(cat ipv4.json | jq -r '.region')
+	isp=$(cat data.json | jq -r '.isp')
+	asn=$(cat data.json | jq -r '.as')
+	org=$(cat data.json | jq -r '.org')
+	country=$(cat data.json | jq -r '.country')
+	city=$(cat data.json | jq -r '.city')
+	countryCode=$(cat data.json | jq -r '.countryCode')
+	region=$(cat data.json | jq -r '.regionName')
+
 	fi
 	
 	if [[ -z "$city" ]]; then
@@ -197,7 +200,7 @@ ip_info(){
 		echo -e " IPv6                 : ${YELLOW}$ipv6${PLAIN}" | tee -a $log
 	fi
 	
-	echo -e " ASN & ISP            : ${SKYBLUE}$asn, $isp${PLAIN}" | tee -a $log
+	echo -e " ASN & ISP            : ${SKYBLUE}$asn${PLAIN}" | tee -a $log
 	echo -e " Organization         : ${YELLOW}$org${PLAIN}" | tee -a $log
 	echo -e " Location             : ${SKYBLUE}$city, ${YELLOW}$country ${SKYBLUE}[$countryCode]${PLAIN}" | tee -a $log
 	echo -e " Region               : ${SKYBLUE}$region${PLAIN}" | tee -a $log
@@ -382,13 +385,14 @@ get_system_info() {
 
 print_intro() {
 	printf ' VPSInfo.sh -- https://github.com/xOS/VPSInfo\n' | tee -a $log
-	printf " Mode  : \e${GREEN}%s\e${PLAIN}    Version : \e${GREEN}%s${PLAIN}\n" $mode_name 1.3 | tee -a $log
+	printf " Mode  : \e${GREEN}%s\e${PLAIN}    Version : \e${GREEN}%s${PLAIN}\n" $mode_name 1.5 | tee -a $log
 	printf ' Usage : wget -qO- git.io/GetInfo.sh | bash\n' | tee -a $log
 }
 
 cleanup() {
 	rm -f test_file_*
 	rm -f tools.py
+	rm -f data.json
 	rm -f ipv4.json
 	rm -f ipv6.json
 }
