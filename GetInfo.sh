@@ -434,13 +434,13 @@ true > $log
 
 case $1 in
 	'info'|'-i'|'--i'|'-info'|'--info' )
-		about;sleep 3;next;get_system_info;print_system_info;next;;
+		get_system_info;print_system_info;next;;
     'version'|'-v'|'--v'|'-version'|'--version')
 		next;about;next;;
    	'io'|'-io'|'--io'|'-drivespeed'|'--drivespeed' )
 		next;print_io;next;;
 	'ip'|'-ip'|'--ip'|'geoip'|'-geoip'|'--geoip' )
-		about;benchinit;next;ip_info;next;cleanup;;
+		benchinit;next;ip_info;next;cleanup;;
 	'bench'|'-a'|'--a'|'-all'|'--all'|'-bench'|'--bench' )
 		bench_all;;
 *)
