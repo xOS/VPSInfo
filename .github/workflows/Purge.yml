@@ -16,4 +16,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Purge CDN Cache
-      run: curl -L https://purge.jsdelivr.net/gh/xOS/VPSInfo@master/tools.py > /dev/null 2>&1
+      run: 
+        curl -L https://purge.jsdelivr.net/gh/xOS/VPSInfo@master/tools.py > /dev/null 2>&1
+        curl -L https://purge.jsdelivr.net/gh/xOS/VPSInfo@master/GetInfo.sh > /dev/null 2>&1
+      
