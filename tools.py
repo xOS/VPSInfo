@@ -11,13 +11,13 @@ sys.setdefaultencoding('utf-8')
 
 def GetNipInfo(para):
     ip_api = urllib2.urlopen(r'https://api.ipgeolocation.io/ipgeo?apiKey=5106b943f2fc4cbebe898384425bef83')
-    ijson = json.loads(ip_api.read())
-    print ijson[para.encode('utf-8')]
+    json1 = json.loads(ip_api.read())
+    print json1[para.encode('utf-8')]
 
 def GetGeoioInfo(para):
     ip_api = urllib2.urlopen(r'https://ipapi.co/json')
-    ijson = json.loads(ip_api.read())
-    print ijson[para.encode('utf-8')]
+    json2 = json.loads(ip_api.read())
+    print json2[para.encode('utf-8')]
     
 def GetDiskInfo(para):
     temp = ExecShell("df -h -P|grep '/'|grep -v tmpfs")[0];
