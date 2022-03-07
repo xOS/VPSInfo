@@ -57,6 +57,17 @@ benchinit() {
 	                apt-get -y install curl > /dev/null 2>&1
 	            fi
 	fi
+	
+	if  [ ! -e '/usr/bin/jq' ]; then
+	        echo " Installing jq ..."
+	            if [ "${release}" == "centos" ]; then
+	                yum update > /dev/null 2>&1
+	                yum -y install jq > /dev/null 2>&1
+	            else
+	                apt-get update > /dev/null 2>&1
+	                apt-get -y install jq > /dev/null 2>&1
+	            fi
+	fi
 
 	if  [ ! -e '/usr/bin/wget' ]; then
 	        echo " Installing Wget ..."
@@ -127,40 +138,70 @@ install_smart() {
 	fi
 }
 
-ip_info4(){
-	ip_date=$(curl -s https://ip.nan.ge/json)
-	echo $ip_date > ip_json.json
-	ip=$(python3 tools.py nip ip)
-	isp=$(python3 tools.py nip isp)
-	asn=$(python3 tools.py geoip asn)
-	org=$(python3 tools.py nip organization)
-	if [ -z "ip_date" ]; then
-		echo $ip_date
-		echo "hala"
-		ip=$(python3 tools.py nip ip)
-		country=$(python3 tools.py nip country_name)
-		city=$(python3 tools.py nip city)
-		countryCode=$(python3 tools.py nip country_code3)
-		region=$(python3 tools.py nip state_prov)
+ip_info(){
+    data_v4=$(wget -4qO- http://ip.qste.com/json | jq -r) 
+    data_v6=$(wget -6qO- http://ip.qste.com/json | jq -r)
+    
+	if [[ ! -z "$data_v4" ]] && [[ -z "$data_v6" ]]; then
+	echo $data_v4 > ipv4.json
+	ipv4=$(cat ipv4.json | jq -r '.ip')
+	isp=$(cat ipv4.json | jq -r '.isp')
+	asn=$(cat ipv4.json | jq -r '.asn')
+	org=$(cat ipv4.json | jq -r '.org')
+	country=$(cat ipv4.json | jq -r '.country')
+	city=$(cat ipv4.json | jq -r '.city')
+	countryCode=$(cat ipv4.json | jq -r '.country_code')
+	region=$(cat ipv4.json | jq -r '.region')
+	
+	elif [[ ! -z "$data_v6" ]] && [[ -z "$data_v4" ]]; then
+	echo $data_v6 > ipv6.json
+	ipv6=$(cat ipv6.json | jq -r '.ip')
+	isp=$(cat ipv6.json | jq -r '.isp')
+	asn=$(cat ipv6.json | jq -r '.asn')
+	org=$(cat ipv6.json | jq -r '.org')
+	country=$(cat ipv6.json | jq -r '.country')
+	city=$(cat ipv6.json | jq -r '.city')
+	countryCode=$(cat ipv6.json | jq -r '.country_code')
+	region=$(cat ipv6.json | jq -r '.region')
+	
 	else
-		ip=$(python3 tools.py geoip ip)
-		country=$(python3 tools.py geoip country_name)
-		city=$(python3 tools.py geoip city)
-		countryCode=$(python3 tools.py geoip country_code)
-		region=$(python3 tools.py geoip region)	
+	echo $data_v4 > ipv4.json
+	echo $data_v6 > ipv6.json
+	ipv4=$(cat ipv4.json | jq -r '.ip')
+	ipv6=$(cat ipv6.json | jq -r '.ip')
+	isp=$(cat ipv4.json | jq -r '.isp')
+	asn=$(cat ipv4.json | jq -r '.asn')
+	org=$(cat ipv4.json | jq -r '.org')
+	country=$(cat ipv4.json | jq -r '.country')
+	city=$(cat ipv4.json | jq -r '.city')
+	countryCode=$(cat ipv4.json | jq -r '.country_code')
+	region=$(cat ipv4.json | jq -r '.region')
 	fi
-	if [ -z "$city" ]; then
+	
+	if [[ -z "$city" ]]; then
 		city=${region}
 	fi
+	if [[ -z "$region" ]]; then
+		region=${country}
+	fi
+	
+	if [[ -z "$isp" ]]; then
+		isp=${org}
+	fi
 
-	echo -e " IP                   : ${YELLOW}$ip${PLAIN}" | tee -a $log
+	if [[ ! -z "$ipv4" ]]; then
+		echo -e " IPv4                 : ${YELLOW}$ipv4${PLAIN}" | tee -a $log
+	fi
+	
+	if [[ ! -z "$ipv6" ]]; then
+		echo -e " IPv6                 : ${YELLOW}$ipv6${PLAIN}" | tee -a $log
+	fi
+	
 	echo -e " ASN & ISP            : ${SKYBLUE}$asn, $isp${PLAIN}" | tee -a $log
 	echo -e " Organization         : ${YELLOW}$org${PLAIN}" | tee -a $log
-	echo -e " Location             : ${SKYBLUE}$city, ${YELLOW}$country[$countryCode]${PLAIN}" | tee -a $log
+	echo -e " Location             : ${SKYBLUE}$city, ${YELLOW}$country ${SKYBLUE}[$countryCode]${PLAIN}" | tee -a $log
 	echo -e " Region               : ${SKYBLUE}$region${PLAIN}" | tee -a $log
 
-	rm -rf tools.py
-	rm -rf ip_json.json
 }
 
 virt_check(){
@@ -341,14 +382,15 @@ get_system_info() {
 
 print_intro() {
 	printf ' VPSInfo.sh -- https://github.com/xOS/VPSInfo\n' | tee -a $log
-	printf " Mode  : \e${GREEN}%s\e${PLAIN}    Version : \e${GREEN}%s${PLAIN}\n" $mode_name 1.0 | tee -a $log
+	printf " Mode  : \e${GREEN}%s\e${PLAIN}    Version : \e${GREEN}%s${PLAIN}\n" $mode_name 1.2 | tee -a $log
 	printf ' Usage : wget -qO- git.io/GetInfo.sh | bash\n' | tee -a $log
 }
 
 cleanup() {
 	rm -f test_file_*
 	rm -f tools.py
-	rm -f ip_json.json
+	rm -f ipv4.json
+	rm -f ipv6.json
 }
 
 bench_all(){
@@ -360,7 +402,7 @@ bench_all(){
 	next;
 	get_system_info;
 	print_system_info;
-	ip_info4;
+	ip_info;
 	next;
 	print_io;
 	next;
@@ -378,7 +420,7 @@ fast_bench(){
 	next;
 	get_system_info;
 	print_system_info;
-	ip_info4;
+	ip_info;
 	next;
 	print_io fast;
 	next;
@@ -398,7 +440,7 @@ case $1 in
    	'io'|'-io'|'--io'|'-drivespeed'|'--drivespeed' )
 		next;print_io;next;;
 	'ip'|'-ip'|'--ip'|'geoip'|'-geoip'|'--geoip' )
-		about;benchinit;next;ip_info4;next;cleanup;;
+		about;benchinit;next;ip_info;next;cleanup;;
 	'bench'|'-a'|'--a'|'-all'|'--all'|'-bench'|'--bench' )
 		bench_all;;
 	'debug'|'-d'|'--d'|'-debug'|'--debug' )
