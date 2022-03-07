@@ -139,8 +139,8 @@ install_smart() {
 }
 
 ip_info(){
-    data_v4=$(wget -4qO- http://ip.qste.com/json | jq -r) 
-    data_v6=$(wget -6qO- http://ip.qste.com/json | jq -r)
+    data_v4=$(curl -s -4 --connect-timeout 3 -m 3 'https://ip.qste.com/json' | jq -r) 
+    data_v6=$(curl -s -6 --connect-timeout 3 -m 3 'https://ip.qste.com/json' | jq -r)
     
 	if [[ ! -z "$data_v4" ]] && [[ -z "$data_v6" ]]; then
 	echo $data_v4 > ipv4.json
@@ -382,7 +382,7 @@ get_system_info() {
 
 print_intro() {
 	printf ' VPSInfo.sh -- https://github.com/xOS/VPSInfo\n' | tee -a $log
-	printf " Mode  : \e${GREEN}%s\e${PLAIN}    Version : \e${GREEN}%s${PLAIN}\n" $mode_name 1.2 | tee -a $log
+	printf " Mode  : \e${GREEN}%s\e${PLAIN}    Version : \e${GREEN}%s${PLAIN}\n" $mode_name 1.3 | tee -a $log
 	printf ' Usage : wget -qO- git.io/GetInfo.sh | bash\n' | tee -a $log
 }
 
